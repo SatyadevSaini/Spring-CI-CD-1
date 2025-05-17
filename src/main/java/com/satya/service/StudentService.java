@@ -9,6 +9,8 @@ import com.satya.bean.Student;
 import com.satya.exception.ResourceNotFoundException;
 import com.satya.repo.StudentRepo;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class StudentService {
 	
@@ -23,6 +25,7 @@ public class StudentService {
 		return repo.findAll();
 	}
 	
+	@Transactional
 	public Student update(Student student , int id) {
 		//find by id then update student 
 		Student student2  = repo.findById(id)
