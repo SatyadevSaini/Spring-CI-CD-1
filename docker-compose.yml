@@ -1,77 +1,77 @@
-
-version: '3'
-services:
-  mysql-container:
-    image: mysql:8
-    container_name: mysql-container-cicd
-    ports:
-      - "3308:3306"  # Host port 3307 maps to container port 3306
-    environment:
-      MYSQL_ROOT_PASSWORD: Satya@123
-      MYSQL_DATABASE: satyaprod
-    volumes:
-      - ./path_to_init_sql:/docker-entrypoint-initdb.d  # Adjust path as needed
-    networks:
-      - backend
-    restart: always  # Optional: restart container if it stops
 #
-  springboot-app:
-    image: app2
-    container_name: springboot-app
-    ports:
-      - "2002:8080"
-    depends_on:
-      - mysql-container
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/satyaprod
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: Satya@123
-    networks:
-      - backend
-    restart: always  # Optional: restart container if it stops
-
-networks:
-  backend:
-    driver: bridge
-
-
-
-#version: '3.8'
-#
+#version: '3'
 #services:
-#  mysql:
+#  mysql-container:
 #    image: mysql:8
-#    container_name: mysql-container-2
-#    restart: always
+#    container_name: mysql-container-cicd
+#    ports:
+#      - "3308:3306"  # Host port 3307 maps to container port 3306
 #    environment:
 #      MYSQL_ROOT_PASSWORD: Satya@123
 #      MYSQL_DATABASE: satyaprod
-#    ports:
-#      - "3307:3306"
-#    healthcheck:
-#      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
 #    volumes:
-#      - mysql_data:/var/lib/mysql
-#
-#  spring-app:
-#    image: satyadev09/app2
-#    container_name: spring-app-2
-#    restart: always
+#      - ./path_to_init_sql:/docker-entrypoint-initdb.d  # Adjust path as needed
+#    networks:
+#      - backend
+#    restart: always  # Optional: restart container if it stops
+##
+#  springboot-app:
+#    image: ci-cd-pipelines
+#    container_name: springboot-app
 #    ports:
-#      - "8085:8080"
+#      - "2002:8080"
 #    depends_on:
-#      mysql:
-#        condition: service_healthy
+#      - mysql-container
 #    environment:
+#      SPRING_PROFILES_ACTIVE: docker
 #      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/satyaprod
 #      SPRING_DATASOURCE_USERNAME: root
 #      SPRING_DATASOURCE_PASSWORD: Satya@123
-#      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-#      SPRING_JPA_SHOW_SQL: "true"
+#    networks:
+#      - backend
+#    restart: always  # Optional: restart container if it stops
 #
-#volumes:
-#  mysql_data:
+#networks:
+#  backend:
+#    driver: bridge
+
+
+
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql-container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Satya@123
+      MYSQL_DATABASE: satyaprod
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  spring-app:
+    image: satyadev09/ci-cd:latest
+    container_name: spring-app-2
+    restart: always
+    ports:
+      - "8091:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/satyaprod
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Satya@123
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+
+volumes:
+  mysql_data:
