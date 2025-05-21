@@ -43,8 +43,3 @@ jobs:
       run: |
         kubectl set image deployment/springboot-deployment springboot-container=${{ secrets.DOCKER_USERNAME }}/springboot-app:${{ github.sha }}
         kubectl rollout status deployment/springboot-deployment
-				
-				
-				
-				
-				
