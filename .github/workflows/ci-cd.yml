@@ -17,6 +17,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '17'
+        distribution: 'temurin'   # ✅ FIX: Add this line
 
     - name: Build App with Maven
       run: mvn clean install -DskipTests
@@ -43,8 +44,3 @@ jobs:
       run: |
         kubectl set image deployment/springboot-deployment springboot-container=${{ secrets.DOCKER_USERNAME }}/springboot-app:${{ github.sha }}
         kubectl rollout status deployment/springboot-deployment
-        
-        
-        
-        
-        
